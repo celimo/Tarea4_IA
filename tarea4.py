@@ -49,12 +49,15 @@ def imprimirResultado(solution):
 
     y = eng.graficar(A1,A2,A3,B1,B2,B3,C1,C2,C3,D2,F1,F2,K1,K2,K3)
 
-    t = np.linspace(0, 20, 1000)
+    t = np.linspace(0, 10, 1000)
 
     y = np.array(y)
 
     print(y.shape)
     plt.plot(t, y)
+    plt.xlabel("Tiempo (s)")
+    plt.ylabel("Salida")
+    plt.grid()
     plt.show()
 
 # Función para detener el entrenamiento
@@ -66,28 +69,32 @@ def stopFunction(instance):
         return "stop"
 
 # Número máximo de iteraciones o de generaciones
-num_generations = 50
+num_generations = 100
 
 # Número de soluciones a ser seleccionados como padres
-num_parents_mating = 25
+num_parents_mating = 100
 
 # Función objetiva definida anteriormente que debe tener dos parámetros de entrada
 fitness_func = funcCalidad
 
 # Número de poblaciones
-sol_per_pop = 50
+sol_per_pop = 200
 
 # Número de genes en cada cromosoma
 num_genes = 15
 
+# Tipo de genes
+# types: int, float, and numpy.int/uint/float(8-64)
+gene_type = int
+
 # Rango más bajo de los alelos
-init_range_low = 0.00001
+init_range_low = 0
 
 # Rango más alto de los alelos
-init_range_high = 5
+init_range_high = 100
 
 # Numero de padres que se quedan (-1=todos, default)
-keep_parents = 5
+keep_parents = 10
 
 # Tipo de selección de padres
 '''
@@ -98,13 +105,22 @@ keep_parents = 5
 "random"(for random selection)
 "tournament"(for tournament selection)
 '''
-parent_selection_type = "rws"
+parent_selection_type = "tournament"
 
 # Operaciones de cruce genético
+#"single_point" (for single-point crossover)
+#"two_points" (for two points crossover)
+#"uniform" (for uniform crossover)
+#"scattered" (for scattered crossover)
 crossover_type = "uniform"
 
 # Tipo de mutación
-mutation_type="random"
+#"random" (for random mutation)
+#"swap" (for swap mutation)
+#"inversion" (for inversion mutation)
+#"scramble" (for scramble mutation)
+#"adaptive" (for adaptive mutation)
+mutation_type = "random"
 
 mutation_probability=0.15
 
@@ -113,11 +129,20 @@ allow_duplicate_genes = False
 
 on_generation = stopFunction
 
-ga_instance = pygad.GA(num_generations=num_generations,
+#filename = 'genetic'
+# Se carga uno anteriormente creado
+#load_ga_instance = pygad.load(filename=filename)
+
+# Población inicial
+#initial_population = load_ga_instance.population
+
+ga_instance = pygad.GA(#initial_population=initial_population,
+                       num_generations=num_generations,
                        num_parents_mating=num_parents_mating,
                        fitness_func=fitness_func,
                        sol_per_pop=sol_per_pop,
                        num_genes=num_genes,
+                       gene_type=gene_type,
                        init_range_low=init_range_low,
                        init_range_high=init_range_high,
                        keep_parents=keep_parents,
@@ -126,10 +151,6 @@ ga_instance = pygad.GA(num_generations=num_generations,
                        crossover_type=crossover_type,
                        allow_duplicate_genes=allow_duplicate_genes,
                        on_generation=on_generation)
-
-filename = 'genetic'
-# Se carga uno anteriormente creado
-loaded_ga_instance = pygad.load(filename=filename)
 
 ga_instance.run()
 
@@ -143,8 +164,5 @@ print("Índice de la mejor solución: {solution_idx}".format(solution_idx=soluti
 # Se guarda el resultado del entrenamiento
 filename = 'genetic'
 ga_instance.save(filename=filename)
-
-
-ga_instance.run()
 
 imprimirResultado(solution)

@@ -2,7 +2,7 @@ function [salida]=funcObjetiva(A1, A2, A3, B1, B2, B3, C1, C2, C3, D2, F1, F2, K
   % Se define que la letra s denota la variable de la función de
   % transerencias
   s = tf('s');
-  
+
   % Se definen las funciones de tranferencia ya dadas
   G1 = (A1)/(B1*s*(s + C1));
   G2 = (A2*s)/(B2*s*(s + C2/s) + D2);
@@ -17,13 +17,13 @@ function [salida]=funcObjetiva(A1, A2, A3, B1, B2, B3, C1, C2, C3, D2, F1, F2, K
   num = G1*G2*G3 + G1*H1*G3;
   den = 1 + G1*G2*G3 + G2*H2 + G2*G3*H3 + G3*H1*H3 + G1*G3*H1;
 
-  
+
   funct = zpk(num/den);
-  
+
   polos = pole(funct);
-  
+
   cont = length(polos);
-  
+
   temp = 0;
   for i = 1:cont
       if real(polos(i)) > 1e-4
@@ -36,9 +36,8 @@ function [salida]=funcObjetiva(A1, A2, A3, B1, B2, B3, C1, C2, C3, D2, F1, F2, K
       respuesta = stepinfo(funct);
       t = respuesta.PeakTime;
       Imp = respuesta.Overshoot;
-      salida = abs(t-1)+ abs(Imp-20);
+      salida = abs(t-1)+ abs(Imp/20-1);
   end
   if isnan(salida)
     salida = 1000;
   end
-  
