@@ -49,7 +49,7 @@ def imprimirResultado(solution):
 
     y = eng.graficar(A1,A2,A3,B1,B2,B3,C1,C2,C3,D2,F1,F2,K1,K2,K3)
 
-    t = np.linspace(0, 100, 1000)
+    t = np.linspace(0, 20, 1000)
 
     y = np.array(y)
 
@@ -61,15 +61,15 @@ def imprimirResultado(solution):
 def stopFunction(instance):
     fit = instance.best_solution()[1]
     index = instance.best_solution()[2]
-    print("Mejor solución: {fit}".format(fit=fit), index)
+    print(instance.generations_completed, "Mejor solución: {fit}".format(fit=fit), index)
     if fit >= -2:
         return "stop"
 
 # Número máximo de iteraciones o de generaciones
-num_generations = 500
+num_generations = 50
 
 # Número de soluciones a ser seleccionados como padres
-num_parents_mating = 20
+num_parents_mating = 25
 
 # Función objetiva definida anteriormente que debe tener dos parámetros de entrada
 fitness_func = funcCalidad
@@ -98,7 +98,7 @@ keep_parents = 5
 "random"(for random selection)
 "tournament"(for tournament selection)
 '''
-parent_selection_type = "tournament"
+parent_selection_type = "rws"
 
 # Operaciones de cruce genético
 crossover_type = "uniform"
@@ -106,7 +106,7 @@ crossover_type = "uniform"
 # Tipo de mutación
 mutation_type="random"
 
-mutation_probability=0.25
+mutation_probability=0.15
 
 # No permite genes duplicados
 allow_duplicate_genes = False
@@ -127,6 +127,10 @@ ga_instance = pygad.GA(num_generations=num_generations,
                        allow_duplicate_genes=allow_duplicate_genes,
                        on_generation=on_generation)
 
+filename = 'genetic'
+# Se carga uno anteriormente creado
+loaded_ga_instance = pygad.load(filename=filename)
+
 ga_instance.run()
 
 ga_instance.plot_result()
@@ -139,5 +143,8 @@ print("Índice de la mejor solución: {solution_idx}".format(solution_idx=soluti
 # Se guarda el resultado del entrenamiento
 filename = 'genetic'
 ga_instance.save(filename=filename)
+
+
+ga_instance.run()
 
 imprimirResultado(solution)

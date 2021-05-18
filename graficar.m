@@ -14,7 +14,7 @@ function [y]=graficar(A1, A2, A3, B1, B2, B3, C1, C2, C3, D2, F1, F2, K1, K2, K3
 
   funct = num/den;
   
-  t = linspace(0,100,1000);
+  t = linspace(0,20,1000);
   
   [y] = step(funct,t);
   
