@@ -65,36 +65,36 @@ def stopFunction(instance):
     fit = instance.best_solution()[1]
     index = instance.best_solution()[2]
     print(instance.generations_completed, "Mejor solución: {fit}".format(fit=fit), index)
-    if fit >= -2:
+    if fit >= -0.5:
         return "stop"
 
 # Número máximo de iteraciones o de generaciones
-num_generations = 100
+num_generations = 300
 
 # Número de soluciones a ser seleccionados como padres
-num_parents_mating = 100
+num_parents_mating = 50
 
 # Función objetiva definida anteriormente que debe tener dos parámetros de entrada
 fitness_func = funcCalidad
 
 # Número de poblaciones
-sol_per_pop = 200
+#sol_per_pop = 200
 
 # Número de genes en cada cromosoma
 num_genes = 15
 
 # Tipo de genes
 # types: int, float, and numpy.int/uint/float(8-64)
-gene_type = int
+#gene_type = float
 
 # Rango más bajo de los alelos
-init_range_low = 0
+#init_range_low = 0
 
 # Rango más alto de los alelos
-init_range_high = 100
+#init_range_high = 100
 
 # Numero de padres que se quedan (-1=todos, default)
-keep_parents = 10
+keep_parents = 5
 
 # Tipo de selección de padres
 '''
@@ -129,22 +129,22 @@ allow_duplicate_genes = False
 
 on_generation = stopFunction
 
-#filename = 'genetic'
+filename = 'Rango_10_10'
 # Se carga uno anteriormente creado
-#load_ga_instance = pygad.load(filename=filename)
+load_ga_instance = pygad.load(filename=filename)
 
 # Población inicial
-#initial_population = load_ga_instance.population
+initial_population = load_ga_instance.population
 
-ga_instance = pygad.GA(#initial_population=initial_population,
+ga_instance = pygad.GA(initial_population=initial_population,
                        num_generations=num_generations,
                        num_parents_mating=num_parents_mating,
                        fitness_func=fitness_func,
-                       sol_per_pop=sol_per_pop,
+                       #sol_per_pop=sol_per_pop,
                        num_genes=num_genes,
-                       gene_type=gene_type,
-                       init_range_low=init_range_low,
-                       init_range_high=init_range_high,
+                       #gene_type=gene_type,
+                       #init_range_low=init_range_low,
+                       #init_range_high=init_range_high,
                        keep_parents=keep_parents,
                        parent_selection_type=parent_selection_type,
                        mutation_probability=mutation_probability,
