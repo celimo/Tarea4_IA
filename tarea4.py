@@ -1,15 +1,16 @@
-import matplotlib.pyplot as plt
-import matlab.engine
-import pygad
-import numpy as np
-import random
-import math
+import matplotlib.pyplot as plt # Imprimir resultados
+import matlab.engine # Conectar con matlab
+import pygad # Red evolutiva
+import numpy as np # Trabajar con matrices
+import random # Generar número aleatorios
+import math # Hacer operaciones matemáticas
 
 # Se conecta con el entorno de matlab
 eng = matlab.engine.start_matlab()
 
 # Se define la función objetiva
 def funcCalidad(solution, solution_idx):
+    # Se selecciona cada valor del cromosoma
     A1 = float(solution[0])
     A2 = float(solution[1])
     A3 = float(solution[2])
@@ -26,11 +27,14 @@ def funcCalidad(solution, solution_idx):
     K2 = float(solution[13])
     K3 = float(solution[14])
 
+    # Se llama a la función de matlab para realizar la operación de la función objetiva
     salida = eng.funcObjetiva(A1,A2,A3,B1,B2,B3,C1,C2,C3,D2,F1,F2,K1,K2,K3)
 
+    # Se retorna el valor de la función objetiva
     return -salida
 
 def imprimirResultado(solution):
+    # Se selecciona cada valor del cromosoma
     A1 = float(solution[0])
     A2 = float(solution[1])
     A3 = float(solution[2])
@@ -47,13 +51,16 @@ def imprimirResultado(solution):
     K2 = float(solution[13])
     K3 = float(solution[14])
 
+    # Se obtiene el array con los valores de salida
     y = eng.graficar(A1,A2,A3,B1,B2,B3,C1,C2,C3,D2,F1,F2,K1,K2,K3)
 
+    # Se crea un espacio lineal con los valores del tiempo
     t = np.linspace(0, 10, 1000)
 
+    # Se cambia el tipo de dato a un arreglo numpy
     y = np.array(y)
 
-    print(y.shape)
+    # Se imprimen los resultados
     plt.plot(t, y)
     plt.xlabel("Tiempo (s)")
     plt.ylabel("Salida")
@@ -62,9 +69,12 @@ def imprimirResultado(solution):
 
 # Función para detener el entrenamiento
 def stopFunction(instance):
+    # Se obtiene la calidad de la mejor solución
     fit = instance.best_solution()[1]
+    # Se obtiene el índice de la mejor solución
     index = instance.best_solution()[2]
     print(instance.generations_completed, "Mejor solución: {fit}".format(fit=fit), index)
+    # Condición de parada
     if fit >= -0.5:
         return "stop"
 
@@ -129,7 +139,7 @@ allow_duplicate_genes = False
 
 on_generation = stopFunction
 
-filename = 'Rango_10_10'
+filename = 'Final'
 # Se carga uno anteriormente creado
 load_ga_instance = pygad.load(filename=filename)
 
@@ -152,17 +162,17 @@ ga_instance = pygad.GA(initial_population=initial_population,
                        allow_duplicate_genes=allow_duplicate_genes,
                        on_generation=on_generation)
 
-ga_instance.run()
+#ga_instance.run()
 
-ga_instance.plot_result()
+#ga_instance.plot_result()
 
-solution, solution_fitness, solution_idx = ga_instance.best_solution()
+solution, solution_fitness, solution_idx = load_ga_instance.best_solution()
 print("Mejor individuo del evolutivo: {solution} ".format(solution=solution))
 print("Calidad de la mejor solución = {solution_fitness}".format(solution_fitness=solution_fitness))
 print("Índice de la mejor solución: {solution_idx}".format(solution_idx=solution_idx))
 
 # Se guarda el resultado del entrenamiento
-filename = 'genetic'
-ga_instance.save(filename=filename)
+#filename = 'genetic'
+#ga_instance.save(filename=filename)
 
 imprimirResultado(solution)
